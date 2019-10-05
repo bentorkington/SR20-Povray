@@ -1,3 +1,11 @@
+global_settings {
+   assumed_gamma 1.5
+   noise_generator 2
+}
+
+light_source {
+   <4, 5, -5>, rgb <1, 1, 1>
+}
 //*PMRawBegin
 #include "shapes.inc"
 #include "functions.inc"
@@ -32,7 +40,6 @@
 #declare cyl3_ex = min(0, (sin (clock + 0.75 ) * 2 * pi)/4) ;
 #declare cyl4_ex = min(0, (sin (clock + 0.5  ) * 2 * pi)/4) ;
 #declare cyl2_ex = min(0, (sin (clock + 0.25 ) * 2 * pi)/4) ;
- 
 //*PMRawEnd
 
 #declare Silver = pigment {
@@ -58,51 +65,16 @@
    }
 }
 
-#declare cranksprocket = difference {
-   union {
-      cylinder {
-         <0, 0, -0.05>, <0, 0, 0.05>, 0.2
-         scale 1
-         rotate <0, 0, 0>
-         translate <0, 0, 0>
-      }
-      
-      lathe {
-         linear_spline
-         4,
-         <0, 0.35>, <0.2, 0.35>, <0.2, 0>, <0, 0>
-         scale 1
-         rotate x*(-90)
-         translate <0, 0, 0>
-      }
-      
-      difference {
-         cylinder {
-            <0, 0.00416667, -0.12467>, <0, 0.00416667, -0.0134729>, 0.254076
-            scale 1
-            rotate <0, 0, 0>
-            translate <0, 0, 0>
-         }
-         
-         torus {
-            0.275, 0.076
-            scale 1
-            rotate x*90
-            translate z*(-0.125)
-         }
-      }
+#declare SprocText = texture {
+   finish {
+      phong 0.1
+      metallic 1
+      roughness 0.3
    }
-   //*PMRawBegin
-   #declare i = 0;
-   union {
-   #while (i<18)
-   cylinder { <0,0.245,-0.06>,<0,0.245,0.06>, 0.04
-   rotate <0,0, i * 20>
+   
+   pigment {
+      color rgb <0.549, 0.475, 0.451>
    }
-   #declare i=i+1;
-   #end
-   }
-   //*PMRawEnd
 }
 
 #declare BlockBumpy = texture {
@@ -113,9 +85,7 @@
    }
    
    finish {
-      ambient rgb <0.35, 0.35, 0.35>
-      diffuse 0.3
-      brilliance 2
+      ambient rgb <0.278431, 0.278431, 0.278431>
       metallic 1
       specular 0.8
       roughness 0.05
@@ -150,8 +120,26 @@
       roughness 0.05
       
       reflection {
-         rgb <0.290196, 0.290196, 0.290196>
+         rgb <0.290196, 0.290196, 0.290196>, rgb <0, 0, 0>
       }
+   }
+}
+
+#declare RoughMetal = texture {
+   normal {
+      bumps
+      0.3
+      scale 0.2
+   }
+   
+   finish {
+      phong 0.1
+      metallic 1
+      roughness 0.2
+   }
+   
+   pigment {
+      color rgb <0.376471, 0.25098, 0.152941>
    }
 }
 
@@ -177,57 +165,8 @@
       roughness 0.05
       
       reflection {
-         rgb <0.658824, 0.658824, 0.658824>
-         metallic 1
+         rgb <0.658824, 0.658824, 0.658824>, rgb <0, 0, 0>
       }
-   }
-}
-
-#declare RoughMetal = texture {
-   normal {
-      wrinkles
-      0.3
-      scale 0.01
-   }
-   
-   finish {
-      phong 0.1
-      metallic 1
-      roughness 0.2
-   }
-   
-   pigment {
-      color rgb <0.376471, 0.25098, 0.152941>
-   }
-}
-
-#declare SprockText = texture {
-   finish {
-      phong 0.1
-      metallic 1
-      roughness 0.3
-   }
-   
-   pigment {
-      color rgb <0.54902, 0.47451, 0.45098>
-   }
-}
-
-#declare RoughMetal_0 = texture {
-   normal {
-      wrinkles
-      0.3
-      scale 0.01
-   }
-   
-   finish {
-      phong 0.1
-      metallic 1
-      roughness 0.2
-   }
-   
-   pigment {
-      color rgb <0.768627, 0.607843, 0.490196>
    }
 }
 
@@ -238,23 +177,23 @@
    translate <0, 0, 0>
 }
 
-#declare chainlink_single = merge {
+#declare chainlink_single = union {
    cylinder {
-      <0, 0.05, 0>, <0, -0.05, 0>, 0.5
+      <0, 0.05, 0>, <0, -0.05, 0>, 0.45
       scale 1
       rotate <0, 0, 0>
       translate x*1
    }
    
    cylinder {
-      <0, 0.05, 0>, <0, -0.05, 0>, 0.5
+      <0, 0.05, 0>, <0, -0.05, 0>, 0.45
       scale 1
       rotate <0, 0, 0>
       translate <0, 0, 0>
    }
    
    box {
-      <0, -0.051, -0.501>, <1, 0.051, 0.501>
+      <0, -0.051, -0.451>, <1, 0.051, 0.451>
       scale 1
       rotate <0, 0, 0>
       translate <0, 0, 0>
@@ -265,7 +204,7 @@
    }
    
    finish {
-      roughness 0.2
+      phong 0.5
    }
 }
 
@@ -297,101 +236,6 @@
    
    finish {
       roughness 0.2
-   }
-}
-
-#declare camsprocket = difference {
-   union {
-      cylinder {
-         //*PMName thesprocket
-         <0, 0, -0.02>, <0, 0, 0.02>, 0.5
-         scale 1
-         rotate <0, 0, 0>
-         translate <0, 0, 0>
-      }
-      
-      cylinder {
-         <0, 0.0041667, 0>, <0, 0.0041667, -0.3>, 0.175
-         scale 1
-         rotate <0, 0, 0>
-         translate <0, 0, 0>
-      }
-      
-      difference {
-         cylinder {
-            <0, 0.00416667, -0.12467>, <0, 0.00416667, -0.0134729>, 0.254076
-            scale 1
-            rotate <0, 0, 0>
-            translate <0, 0, 0>
-         }
-         
-         torus {
-            0.275, 0.076
-            scale 1
-            rotate x*90
-            translate z*(-0.095)
-         }
-      }
-   }
-   
-   union {
-      //*PMRawBegin
-      #declare i = 0;
-      union {
-      #while (i<36)
-      cylinder { <0,0.495,-0.05>,<0,0.495,0.05>, 0.045
-      rotate <0,0, i * 10>
-      }
-      #declare i=i+1;
-      #end
-      }
-      //*PMRawEnd
-      
-      cylinder {
-         <0, 0, 0.05>, <0, 0, -0.05>, 0.1
-         scale 1
-         translate x*0.3
-         rotate <0, 0, 0>
-      }
-      
-      cylinder {
-         <0, 0, 0.05>, <0, 0, -0.05>, 0.1
-         scale 1
-         translate x*0.3
-         rotate z*60
-      }
-      
-      cylinder {
-         <0, 0, 0.05>, <0, 0, -0.05>, 0.1
-         scale 1
-         translate x*0.3
-         rotate z*120
-      }
-      
-      cylinder {
-         <0, 0, 0.05>, <0, 0, -0.05>, 0.1
-         scale 1
-         translate x*0.3
-         rotate z*180
-      }
-      
-      cylinder {
-         <0, 0, 0.05>, <0, 0, -0.05>, 0.1
-         scale 1
-         translate x*0.3
-         rotate z*240
-      }
-      
-      cylinder {
-         <0, 0, 0.05>, <0, 0, -0.05>, 0.1
-         scale 1
-         translate x*0.3
-         rotate z*300
-      }
-   }
-   
-   texture {
-      SprockText
    }
 }
 
@@ -536,38 +380,37 @@
 }
 //*PMRawBegin
 #declare chainphase=mod(clock * 2 * 9, 1.0);
-
 //*PMRawEnd
 //*PMRawBegin
 #declare index=0;
 
 #declare strchain = union {
 #if (chainphase >= 0.5)
-  #while(index<44)
-    object {
-      link_outer_0
-      translate <0,-index*0.08727-(mod(chainphase,0.5)*2*0.08727),0>
-    }
-    #declare index=index+1;
-    object {
-      link_inner_0
-      translate <0,-index*0.08727-(mod(chainphase,0.5)*2*0.08727),0> 
-    }
-    #declare index=index+1;
-  #end
+ #while(index<44)
+   object {
+     link_outer_0
+     translate <0,-index*0.08727-(mod(chainphase,0.5)*2*0.08727),0>
+   }
+   #declare index=index+1;
+   object {
+     link_inner_0
+     translate <0,-index*0.08727-(mod(chainphase,0.5)*2*0.08727),0> 
+   }
+   #declare index=index+1;
+ #end
 #else
-  #while(index<44)
-    object {
-      link_inner_0
-      translate <0,-index*0.08727-(mod(chainphase,0.5)*2*0.08727),0>
-    }
-    #declare index=index+1;
-    object {
-      link_outer_0
-      translate <0,-index*0.08727-(mod(chainphase,0.5)*2*0.08727),0> 
-    }
-    #declare index=index+1;
-  #end
+ #while(index<44)
+   object {
+     link_inner_0
+     translate <0,-index*0.08727-(mod(chainphase,0.5)*2*0.08727),0>
+   }
+   #declare index=index+1;
+   object {
+     link_outer_0
+     translate <0,-index*0.08727-(mod(chainphase,0.5)*2*0.08727),0> 
+   }
+   #declare index=index+1;
+ #end
 #end
 }
 //*PMRawEnd
@@ -585,7 +428,7 @@
     #declare index=index+1;
     object {
       link_inner_0
-      translate <0,-index*0.08727-(mod(chainphase,0.5)*2*0.08727),0> 
+      translate <0,-index*0.08727-(mod(chainphase,0.5)*2*0.08727),0>
     }
     #declare index=index+1;
   #end
@@ -598,7 +441,7 @@
     #declare index=index+1;
     object {
       link_outer_0
-      translate <0,-index*0.08727-(mod(chainphase,0.5)*2*0.08727),0> 
+      translate <0,-index*0.08727-(mod(chainphase,0.5)*2*0.08727),0>
     }
     #declare index=index+1;
   #end
@@ -610,35 +453,35 @@
 
 #declare rndchain = union {
 #if(chainphase >= 0.5) 
-  #while(index<100)
-  object {
-    link_outer_0
-    rotate <85-index,0,0>
-    translate <0,cos(radians(index))/2,-sin(radians(index))/2>
-  }
-  #declare index=index+10.0;
-  object {
-    link_inner_0
-    rotate <85-index,0,0>  
-    translate <0,cos(radians(index))/2,-sin(radians(index))/2>
-  }
-  #declare index=index+10.0;
-  #end
+ #while(index<100)
+ object {
+   link_outer_0
+   rotate <85-index,0,0>
+   translate <0,cos(radians(index))/2,-sin(radians(index))/2>
+ }
+ #declare index=index+10.0;
+ object {
+   link_inner_0
+   rotate <85-index,0,0>  
+   translate <0,cos(radians(index))/2,-sin(radians(index))/2>
+ }
+ #declare index=index+10.0;
+ #end
 #else
-  #while(index<100)
-  object {
-    link_inner_0
-    rotate <85-index,0,0>
-    translate <0,cos(radians(index))/2,-sin(radians(index))/2>
-  }
-  #declare index=index+10.0;
-  object {
-    link_outer_0
-    rotate <85-index,0,0>  
-    translate <0,cos(radians(index))/2,-sin(radians(index))/2>
-  }
-  #declare index=index+10.0;
-  #end
+ #while(index<100)
+ object {
+   link_inner_0
+   rotate <85-index,0,0>
+   translate <0,cos(radians(index))/2,-sin(radians(index))/2>
+ }
+ #declare index=index+10.0;
+ object {
+   link_outer_0
+   rotate <85-index,0,0>  
+   translate <0,cos(radians(index))/2,-sin(radians(index))/2>
+ }
+ #declare index=index+10.0;
+ #end
 #end
 }
 //*PMRawEnd
@@ -698,6 +541,62 @@
    }
 }
 
+#declare boss = difference {
+   cylinder {
+      <0, 0, -0.1>, <0, 0, 1>, 0.5
+      
+      texture {
+         BlockBumpy
+      }
+      scale 1
+      rotate <0, 0, 0>
+      translate <0, 0, 0>
+   }
+   
+   union {
+      cylinder {
+         <0, 0, -0.2>, <0, 0, 0.7>, 0.2
+         scale 1
+         rotate <0, 0, 0>
+         translate <0, 0, 0>
+      }
+      
+      box {
+         <-0.6, -0.6, -0.6>, <0.6, 0.6, 0>
+         scale 1
+         rotate <0, 0, 0>
+         translate <0, 0, 0>
+      }
+      
+      texture {
+         BlockText
+      }
+   }
+}
+
+#declare bosssupport = union {
+   object {
+      boss
+      scale 1
+      rotate <0, 0, 0>
+      translate <0, 0, 0>
+   }
+   
+   cylinder {
+      <0, 4.03333, 1.6>, <0, 0.366667, 0.666667>, 0.5
+      scale <0.35, 1, 1>
+      rotate <0, 0, 0>
+      translate <0, 0, 0>
+   }
+   
+   cylinder {
+      <0, 4.03333, 1.6>, <0, 0.366667, 0.666667>, 0.5
+      scale <0.35, -1, 1>
+      rotate <0, 0, 0>
+      translate <0, 0, 0>
+   }
+}
+
 #declare crank_bigend_ko = box {
    <-0.35, -0.34, 0.34>, <0.35, 0.34, -0.34>
    scale 1
@@ -718,15 +617,15 @@
       }
       
       cylinder {
-         <1.6, -0.45, 0.5>, <1.6, -0.45, -0.5>, 2
+         <1.6, -0.45, 0.5>, <1.6, -0.45, -0.5>, 4
          scale 1
          rotate <0, 0, 0>
-         translate <0, 0, 0>
+         translate <2.32481, 0.435415, 0>
       }
    }
    
    cylinder {
-      <0, 0, 0>, <-0.25, 0, 0>, 0.35
+      <0, 0, 0>, <-0.25, 0, 0>, 0.4
       scale 1
       rotate <0, 0, 0>
       translate <0, 0, 0>
@@ -738,7 +637,7 @@
       linear_sweep
       0.15, -0.15,
       24,
-      <-0.178719, 0.506653>, <-0.111986, 0.932193>, <0.130469, 0.951337>, <0.165703, 0.500609>, <0.165703, 0.500609>, <0.196704, 0.437109>, <0.341323, 0.175457>, <0.369963, -0.00231333>, <0.369963, -0.00231333>, <0.43635, -0.0282781>, <0.485317, -0.0798243>, <0.543807, -0.112049>, <0.543807, -0.112049>, <0.614415, -0.703673>, <-0.567224, -0.766659>, <-0.550149, -0.132991>, <-0.550149, -0.132991>, <-0.467069, -0.133969>, <-0.453707, -0.002026>, <-0.374257, -0.001905>, <-0.374257, -0.001905>, <-0.296072, 0.245214>, <-0.241796, 0.400058>, <-0.178719, 0.506653>
+      <-0.198297, 0.0344155>, <-0.0591473, 0.0245401>, <-0.000295499, 0.00841316>, <0.107907, 0.0277324>, <0.107907, 0.0277324>, <0.215799, -0.0166059>, <0.333586, 0.0330092>, <0.48663, 0.01852>, <0.48663, 0.01852>, <0.56135, 0.0092219>, <0.45615, 0.016009>, <0.58964, 0.017118>, <0.58964, 0.017118>, <0.692327, -1.05804>, <-0.66527, -1.18437>, <-0.5657, -0.0085864>, <-0.5657, -0.0085864>, <-0.48262, -0.0095648>, <-0.54954, 0.010474>, <-0.47009, 0.010595>, <-0.47009, 0.010595>, <-0.359551, 0.0215451>, <-0.268677, 0.0348688>, <-0.198297, 0.0344155>
       scale 1
       rotate <0, 90, 90>
    }
@@ -770,6 +669,53 @@
    }
 }
 
+#declare cranksprocket = difference {
+   union {
+      cylinder {
+         <0, 0, -0.05>, <0, 0, 0.05>, 0.2
+         scale 1
+         rotate <0, 0, 0>
+         translate <0, 0, 0>
+      }
+      
+      lathe {
+         linear_spline
+         4,
+         <0, 0.35>, <0.2, 0.35>, <0.2, 0>, <0, 0>
+         scale 1
+         rotate x*(-90)
+         translate <0, 0, 0>
+      }
+      
+      difference {
+         cylinder {
+            <0, 0.00416667, -0.12467>, <0, 0.00416667, -0.0134729>, 0.254076
+            scale 1
+            rotate <0, 0, 0>
+            translate <0, 0, 0>
+         }
+         
+         torus {
+            0.275, 0.076
+            scale 1
+            rotate x*90
+            translate z*(-0.125)
+         }
+      }
+   }
+   //*PMRawBegin
+   #declare i = 0;
+   union {
+   #while (i<18)
+   cylinder { <0,0.245,-0.06>,<0,0.245,0.06>, 0.04
+   rotate <0,0, i * 20>
+   }
+   #declare i=i+1;
+   #end
+   }
+   //*PMRawEnd
+}
+
 #declare cshaft_main = cylinder {
    <-2.5, 0, 0>, <2.5, 0, 0>, 0.337
    
@@ -781,7 +727,7 @@
    translate <0, 0, 0>
 }
 
-#declare cshaft_assy = merge {
+#declare crankshaft_assy = merge {
    difference {
       //*PMName main_journals
       
@@ -891,7 +837,11 @@
 }
 
 #declare sr20_cyl_bore = cylinder {
-   <0, 2.8, 0>, <0, 0, 0>, 0.505
+   <0, 2.8, 0>, <0, 0, 0>, 0.5
+   
+   texture {
+      SleeveTexture
+   }
    scale 1
    rotate <0, 0, 0>
    translate <0, 0, 0>
@@ -911,14 +861,10 @@
       rotate <0, 0, 0>
       translate <0, 0, 0>
    }
-   
-   texture {
-      SleeveTexture
-   }
 }
 
 #declare SR20_block = difference {
-   merge {
+   union {
       box {
          <-2.5, 0.4, -0.833333>, <2.5, 2.75, 0.833333>
          scale 1
@@ -945,8 +891,8 @@
       }
    }
    
-   merge {
-      merge {
+   union {
+      union {
          //*PMName cyl_bores
          
          object {
@@ -972,38 +918,6 @@
          
          object {
             sr20_cyl_bore
-            scale 1
-            rotate <0, 0, 0>
-            translate x*1.875
-         }
-      }
-      
-      merge {
-         //*PMName cyl_sleeves
-         
-         object {
-            sr20_cyl_sleeve
-            scale 1
-            rotate <0, 0, 0>
-            translate x*(-1.875)
-         }
-         
-         object {
-            sr20_cyl_sleeve
-            scale 1
-            rotate <0, 0, 0>
-            translate x*(-0.625)
-         }
-         
-         object {
-            sr20_cyl_sleeve
-            scale 1
-            rotate <0, 0, 0>
-            translate x*0.625
-         }
-         
-         object {
-            sr20_cyl_sleeve
             scale 1
             rotate <0, 0, 0>
             translate x*1.875
@@ -1047,7 +961,7 @@
    }
 }
 
-#declare sr20_piston = merge {
+#declare sr20_piston = union {
    difference {
       //*PMName piston_cast
       
@@ -1069,6 +983,10 @@
       
       superellipsoid {
          <1, 0.25>
+         
+         texture {
+            BlockBumpy
+         }
          scale 1
          rotate x*90
          translate y*2.9
@@ -1112,7 +1030,16 @@
          roughness 0.05
          
          reflection {
-            rgb <0.380392, 0.380392, 0.380392>
+            rgb <0.380392, 0.380392, 0.380392>, rgb <0, 0, 0>
+         }
+      }
+      
+      bounded_by {
+         cylinder {
+            <0, 2.0473, 0>, <0, 0, 0>, 1.02
+            scale 1
+            rotate <0, 0, 0>
+            translate <0, 0, 0>
          }
       }
    }
@@ -1124,18 +1051,9 @@
       rotate <0, 0, 0>
       translate <0, 0, 0>
    }
-   
-   bounded_by {
-      cylinder {
-         <0, 2.0541, 0>, <0, -0.02, 0>, 1.1227
-         scale 1
-         rotate <0, 0, 0>
-         translate <0, 0, 0>
-      }
-   }
 }
 
-#declare conrod_bolthsg = merge {
+#declare conrod_bolthsg = union {
    box {
       <-0.14, -0.001, 0.3>, <0.14, 0.25, 0.4>
       scale 1
@@ -1158,7 +1076,7 @@
    translate <0, 0, 0>
 }
 
-#declare sr20_conrod = merge {
+#declare sr20_conrod = union {
    difference {
       cylinder {
          <-0.14, 0, 0>, <0.14, 0, 0>, 0.4
@@ -1259,21 +1177,87 @@
    }
    
    texture {
+   }
+}
+
+#declare sr20_conrod_0 = merge {
+   cylinder {
+      <-0.14, 0, 0>, <0.14, 0, 0>, 0.585528
+      scale 1
+      rotate <0, 0, 0>
+      translate <0, 0, 0>
+   }
+   
+   object {
+      conrod_bolthsg
+      scale 1
+      rotate <0, 0, 0>
+      translate <0, 0, 0>
+   }
+   
+   object {
+      conrod_bolthsg
+      scale <1, -1, 1>
+      rotate <0, 0, 0>
+      translate <0, 0, 0>
+   }
+   
+   object {
+      conrod_bolthsg
+      scale <1, 1, -1>
+      rotate <0, 0, 0>
+      translate <0, 0, 0>
+   }
+   
+   object {
+      conrod_bolthsg
+      scale <1, -1, -1>
+      rotate <0, 0, 0>
+      translate <0, 0, 0>
+   }
+   
+   difference {
+      cylinder {
+         <-0.14, 1.75, 0>, <0.14, 1.75, 0>, 0.25
+         scale 1
+         rotate <0, 0, 0>
+         translate <0, 0, 0>
+      }
+      
+      cylinder {
+         <-0.15, 1.75, 0>, <0.15, 1.75, 0>, 0.17
+         scale 1
+         rotate <0, 0, 0>
+         translate <0, 0, 0>
+      }
+   }
+   
+   prism {
+      //*PMName smoother
+      bezier_spline
+      linear_sweep
+      0.54564, 1.5694,
+      32,
+      <0.0523097, 0.10466>, <0.045484, 0.0688182>, <0.0243368, 0.0920425>, <0.0149646, 0.0705492>, <0.0149646, 0.0705492>, <0.0195035, 0.0422717>, <0.0135004, -0.0275333>, <0.0137017, -0.0560505>, <0.0137017, -0.0560505>, <0.0144385, -0.0757438>, <0.0394164, -0.0721045>, <0.0469362, -0.101512>, <0.0469362, -0.101512>, <0.0553793, -0.121248>, <-0.0641002, -0.127866>, <-0.0619302, -0.0992563>, <-0.0619302, -0.0992563>, <-0.0512711, -0.0711436>, <-0.0264277, -0.0777679>, <-0.0187054, -0.0556771>, <-0.0187054, -0.0556771>, <-0.0175858, -0.0319536>, <-0.020986, 0.0436149>, <-0.01726, 0.0707541>, <-0.01726, 0.0707541>, <-0.0267633, 0.0933795>, <-0.0532537, 0.0714128>, <-0.0617234, 0.107694>, <-0.0617234, 0.107694>, <-0.0669342, 0.130284>, <0.064758, 0.127689>, <0.0523097, 0.10466>
+      scale 1
+      rotate <0, 0, 0>
+      translate <0, 0, 0>
+   }
+   
+   texture {
       RoughMetal
    }
 }
 
-#declare cam_lobe = merge {
-   prism {
-      bezier_spline
-      linear_sweep
-      0, 0.25,
-      12,
-      <-0.0620931, 0.092178>, <0.0290616, 0.157045>, <0.190012, 0.0648477>, <0.197061, 0.00361682>, <0.197061, 0.00361682>, <0.204902, -0.0539845>, <0.050492, -0.132006>, <-0.0346815, -0.105879>, <-0.0346815, -0.105879>, <-0.104526, -0.0878001>, <-0.14183, 0.0352019>, <-0.0620931, 0.092178>
-      scale 1
-      rotate <0, 45, 90>
-      translate x*0.125
-   }
+#declare cam_lobe = prism {
+   bezier_spline
+   linear_sweep
+   0, 0.25,
+   12,
+   <-0.0620931, 0.092178>, <0.0290616, 0.157045>, <0.190012, 0.0648477>, <0.197061, 0.00361682>, <0.197061, 0.00361682>, <0.204902, -0.0539845>, <0.050492, -0.132006>, <-0.0346815, -0.105879>, <-0.0346815, -0.105879>, <-0.104526, -0.0878001>, <-0.14183, 0.0352019>, <-0.0620931, 0.092178>
+   scale 1
+   rotate <0, 45, 90>
+   translate x*0.125
 }
 
 #declare cam_journal = cylinder {
@@ -1283,7 +1267,102 @@
    translate <0, 0, 0>
 }
 
-#declare camshaft = merge {
+#declare camsprocket = difference {
+   union {
+      cylinder {
+         //*PMName thesprocket
+         <0, 0, -0.02>, <0, 0, 0.02>, 0.5
+         scale 1
+         rotate <0, 0, 0>
+         translate <0, 0, 0>
+      }
+      
+      cylinder {
+         <0, 0.0041667, 0>, <0, 0.0041667, -0.3>, 0.175
+         scale 1
+         rotate <0, 0, 0>
+         translate <0, 0, 0>
+      }
+      
+      difference {
+         cylinder {
+            <0, 0.00416667, -0.12467>, <0, 0.00416667, -0.0134729>, 0.254076
+            scale 1
+            rotate <0, 0, 0>
+            translate <0, 0, 0>
+         }
+         
+         torus {
+            0.275, 0.076
+            scale 1
+            rotate x*90
+            translate z*(-0.095)
+         }
+      }
+   }
+   
+   union {
+      //*PMRawBegin
+      #declare i = 0;
+      union {
+      #while (i<36)
+      cylinder { <0,0.495,-0.05>,<0,0.495,0.05>, 0.045
+      rotate <0,0, i * 10>
+      }
+      #declare i=i+1;
+      #end
+      }
+      //*PMRawEnd
+      
+      cylinder {
+         <0, 0, 0.05>, <0, 0, -0.05>, 0.1
+         scale 1
+         translate x*0.3
+         rotate <0, 0, 0>
+      }
+      
+      cylinder {
+         <0, 0, 0.05>, <0, 0, -0.05>, 0.1
+         scale 1
+         translate x*0.3
+         rotate z*60
+      }
+      
+      cylinder {
+         <0, 0, 0.05>, <0, 0, -0.05>, 0.1
+         scale 1
+         translate x*0.3
+         rotate z*120
+      }
+      
+      cylinder {
+         <0, 0, 0.05>, <0, 0, -0.05>, 0.1
+         scale 1
+         translate x*0.3
+         rotate z*180
+      }
+      
+      cylinder {
+         <0, 0, 0.05>, <0, 0, -0.05>, 0.1
+         scale 1
+         translate x*0.3
+         rotate z*240
+      }
+      
+      cylinder {
+         <0, 0, 0.05>, <0, 0, -0.05>, 0.1
+         scale 1
+         translate x*0.3
+         rotate z*300
+      }
+   }
+   
+   texture {
+      SprocText
+   }
+}
+
+#declare camshaft = union {
    object {
       //*PMName Sprocket
       camsprocket
@@ -1384,6 +1463,205 @@
    }
 }
 
+#declare portknockout = union {
+   //*PMName ports
+   
+   torus {
+      0.75, 0.125
+      scale 1
+      rotate <25, 0, 90>
+      translate y*(-0.25)
+   }
+   
+   torus {
+      0.75, 0.125
+      scale 1
+      rotate <-25, 0, 90>
+      translate y*(-0.25)
+   }
+}
+
+#declare headhole = cylinder {
+   <0, 1.05, 0>, <0, -0.05, 0>, 0.125
+   scale 1
+   rotate <0, 0, 0>
+   translate <0, 0, 0>
+}
+
+#declare valvegear_bore = cylinder {
+   <0, 1.05, 0>, <0, 0.3, 0>, 0.3
+   scale 1
+   rotate <0, 0, 0>
+   translate <0, 0, 0>
+}
+
+#declare sr20_head_cast = union {
+   difference {
+      box {
+         <-2.7, 1, 1>, <2.7, 0, -1>
+         scale 1
+         rotate <0, 0, 0>
+         translate <0, 0, 0>
+      }
+      
+      merge {
+         //*PMName ports
+         
+         object {
+            portknockout
+            scale 1
+            rotate <0, 0, 0>
+            translate x*(-1.875)
+         }
+         
+         object {
+            portknockout
+            scale 1
+            rotate <0, 0, 0>
+            translate x*1.875
+         }
+         
+         object {
+            portknockout
+            scale 1
+            rotate <0, 0, 0>
+            translate x*0.625
+         }
+         
+         object {
+            portknockout
+            scale 1
+            rotate <0, 0, 0>
+            translate x*(-0.625)
+         }
+         translate z*1
+      }
+      
+      merge {
+         //*PMName ports
+         
+         object {
+            portknockout
+            scale 1
+            rotate <0, 0, 0>
+            translate x*(-1.875)
+         }
+         
+         object {
+            portknockout
+            scale 1
+            rotate <0, 0, 0>
+            translate x*1.875
+         }
+         
+         object {
+            portknockout
+            scale 1
+            rotate <0, 0, 0>
+            translate x*0.625
+         }
+         
+         object {
+            portknockout
+            scale 1
+            rotate <0, 0, 0>
+            translate x*(-0.625)
+         }
+         translate z*(-1)
+      }
+      
+      merge {
+         //*PMName cylkos
+         
+         sphere {
+            //*PMName cyl1
+            <0, 0, 0>, 2
+            scale 1
+            rotate <0, 0, 0>
+            translate <-1.875, -1.92, 0>
+         }
+         
+         sphere {
+            //*PMName cyl2
+            <0, 0, 0>, 2
+            scale 1
+            rotate <0, 0, 0>
+            translate <-0.625, -1.92, 0>
+         }
+         
+         sphere {
+            //*PMName cyl3
+            <0, 0, 0>, 2
+            scale 1
+            rotate <0, 0, 0>
+            translate <0.625, -1.92, 0>
+         }
+         
+         sphere {
+            //*PMName cyl4
+            <0, 0, 0>, 2
+            scale 1
+            rotate <0, 0, 0>
+            translate <1.875, -1.92, 0>
+         }
+      }
+      
+      merge {
+         //*PMName oles
+         
+         object {
+            //*PMName spark_1
+            headhole
+            scale 1
+            rotate <0, 0, 0>
+            translate x*(-1.875)
+         }
+         
+         object {
+            //*PMName spark_2
+            headhole
+            scale 1
+            rotate <0, 0, 0>
+            translate x*(-0.625)
+         }
+         
+         object {
+            //*PMName spark_3
+            headhole
+            scale 1
+            rotate <0, 0, 0>
+            translate x*0.625
+         }
+         
+         object {
+            //*PMName spark_4
+            headhole
+            scale 1
+            rotate <0, 0, 0>
+            translate x*1.875
+         }
+         
+         object {
+            valvegear_bore
+            scale 1
+            rotate <0, 0, 0>
+            translate <0, 0, 0>
+         }
+      }
+      
+      box {
+         <-2.9404, 0.445647, -1.2>, <2.97442, 1.2917, 1.16667>
+         scale 1
+         rotate <0, 0, 0>
+         translate <0, 0, 0>
+      }
+   }
+   
+   texture {
+      FinishedMetal
+   }
+}
+
 #declare valve = lathe {
    linear_spline
    6,
@@ -1393,7 +1671,7 @@
    translate <0, 0, 0>
 }
 
-#declare exvalve_pair = merge {
+#declare exvalve_pair = union {
    object {
       valve
       scale 1
@@ -1409,7 +1687,7 @@
    }
 }
 
-#declare newvalvepair_1IN = merge {
+#declare newvalvepair_1IN = union {
    object {
       valve
       //*PMRawBegin
@@ -1431,7 +1709,7 @@
    }
 }
 
-#declare newvalvepair_3IN = merge {
+#declare newvalvepair_3IN = union {
    object {
       valve
       //*PMRawBegin
@@ -1453,7 +1731,7 @@
    }
 }
 
-#declare newvalvepair_4IN = merge {
+#declare newvalvepair_4IN = union {
    object {
       valve
       //*PMRawBegin
@@ -1475,7 +1753,7 @@
    }
 }
 
-#declare newvalvepair_2IN = merge {
+#declare newvalvepair_2IN = union {
    object {
       valve
       //*PMRawBegin
@@ -1497,7 +1775,7 @@
    }
 }
 
-#declare newvalvepair_1OUT = merge {
+#declare newvalvepair_1OUT = union {
    object {
       valve
       //*PMRawBegin
@@ -1519,7 +1797,7 @@
    }
 }
 
-#declare newvalvepair_3OUT = merge {
+#declare newvalvepair_3OUT = union {
    object {
       valve
       //*PMRawBegin
@@ -1541,7 +1819,7 @@
    }
 }
 
-#declare newvalvepair_4OUT = merge {
+#declare newvalvepair_4OUT = union {
    object {
       valve
       //*PMRawBegin
@@ -1563,7 +1841,7 @@
    }
 }
 
-#declare newvalvepair_2OUT = merge {
+#declare newvalvepair_2OUT = union {
    object {
       valve
       //*PMRawBegin
@@ -1585,7 +1863,7 @@
    }
 }
 
-#declare valveset_inlet = merge {
+#declare valveset_inlet = union {
    //*PMName inlet_valves
    
    object {
@@ -1618,7 +1896,7 @@
    }
 }
 
-#declare valveset_exhaust = merge {
+#declare valveset_exhaust = union {
    //*PMName outlet_valves
    
    object {
@@ -1651,7 +1929,7 @@
    }
 }
 
-#declare valvetrain = merge {
+#declare valvetrain = union {
    object {
       //*PMName inlet_cam
       camshaft
@@ -1695,13 +1973,20 @@
    }
 }
 
-#declare sr20_head = merge {
-   object {
-      //*PMName Valvetrain
-      valvetrain
-      scale 1
-      rotate <0, 0, 0>
-      translate <0, 0, 0>
+#declare sr20_head = object {
+   //*PMName Valvetrain
+   valvetrain
+   scale 1
+   rotate <0, 0, 0>
+   translate <0, 0, 0>
+   
+   bounded_by {
+      box {
+         <-3.27161, 1.64306, 1.07145>, <3.07512, -0.160766, -1.12504>
+         scale 1
+         rotate <0, 0, 0>
+         translate <0, 0, 0>
+      }
    }
 }
 
@@ -1720,18 +2005,18 @@ sky_sphere {
    }
 }
 
-merge {
+union {
    //*PMName engine_sr20
    
    object {
       //*PMName crankshaft
-      cshaft_assy
+      crankshaft_assy
       //*PMRawBegin
             rotate <crankangle, 0, 0>
       //*PMRawEnd
    }
    
-   merge {
+   union {
       //*PMName pistons
       
       object {
@@ -1779,12 +2064,12 @@ merge {
       }
    }
    
-   merge {
+   union {
       //*PMName conrods
       
       object {
          //*PMName conrod_4
-         sr20_conrod
+         sr20_conrod_0
          //*PMRawBegin
          scale 1
          rotate <con_tilt14, 0, 0>
@@ -1795,7 +2080,7 @@ merge {
       
       object {
          //*PMName conrod_1
-         sr20_conrod
+         sr20_conrod_0
          //*PMRawBegin
          scale 1
          rotate <con_tilt14, 0, 0>
@@ -1806,7 +2091,7 @@ merge {
       
       object {
          //*PMName conrod_3
-         sr20_conrod
+         sr20_conrod_0
          //*PMRawBegin
          scale 1
          rotate <con_tilt23, 0, 0>
@@ -1817,7 +2102,7 @@ merge {
       
       object {
          //*PMName conrod_2
-         sr20_conrod
+         sr20_conrod_0
          //*PMRawBegin
          scale 1
          rotate <con_tilt23, 0, 0>
@@ -1887,34 +2172,89 @@ merge {
       rotate <0, 0, 0>
       translate <-3, 3.75, -0.5>
    }
-}
-
-global_settings {
-   adc_bailout 0.0039216
-   ambient_light rgb <0.792157, 0.917647, 1>
-   assumed_gamma 1.5
-   noise_generator 2
+   
+   union {
+      //*PMName vapours
+      
+      object {
+         VapourCyl
+         
+         texture {
+            //*PMName fire
+            bozo
+            turbulence <0, 0, 0>
+            
+            texture_map {
+               [ 0 pigment {
+                  color rgbt <0, 0, 0, 1>
+               }
+               ]
+               [ 0.1 pigment {
+                  color rgbt <1, 0.0352941, 0.0352941, 0.6>
+               }
+               ]
+               [ 1 pigment {
+                  color rgbt <0.95294, 1, 0.078431, 0.25>
+               }
+               ]
+            }
+            scale <0.5, 0.1, 0.5>
+         }
+         scale 1
+         rotate <0, 0, 0>
+         translate <-0.625, 2.75, 0>
+      }
+      
+      object {
+         VapourCyl
+         
+         texture {
+            //*PMName fuel
+            bozo
+            turbulence <0, 0, 0>
+            
+            texture_map {
+               [ 0 pigment {
+                  color rgbt <0, 0, 0, 1>
+               }
+               ]
+               [ 0.1 pigment {
+                  color rgbt <0.47059, 0.66667, 1, 0.8>
+               }
+               ]
+               [ 1 pigment {
+                  color rgbt <0.47059, 0.66667, 1, 0.4>
+               }
+               ]
+            }
+            scale 0.1
+         }
+         scale 1
+         rotate <0, 0, 0>
+         translate <0.625, 2.75, 0>
+      }
+   }
 }
 
 light_source {
-   <5.28852, 5.1661, -5.67463>, rgb <1, 1, 1>
+   <5.238, 5.1661, -9.86811>, rgb <1, 1, 1>
    area_light <1, 0, 0>, <0, 1, 0>, 3, 3
    circular
 }
 
 light_source {
-   <-8.80633, -1.52784, -5.58872>, rgb <1, 1, 1>
+   <-6.73485, -1.52784, -9.83273>, rgb <1, 1, 1>
    area_light <1, 0, 0>, <0, 1, 0>, 3, 3
    circular
 }
 
 camera {
    perspective
-   location < cos(clock * pi * 0.5 ) * -4.65457, 4.63023, -3.0761>
+   location <3.89027, 4.84714, -4.85113>
    sky <0, 1, 0>
    direction <0, 0, 1>
-   right <1.3333, 0, 0>
+   right <1.78, 0, 0>
    up <0, 1, 0>
-   look_at <-0.101475, 2.05249, 1.25252>
-   angle 45
+   look_at <-0.16945, 2.24958, 0.913192>
+   angle 55
 }
