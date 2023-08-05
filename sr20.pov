@@ -637,7 +637,6 @@ light_source {
 
 #declare sr20_head = object {
    valvetrain   
-   bounded_by { box { <-3.27161, 1.64306, 1.07145>, <3.07512, -0.160766, -1.12504> } }
 }
 
 sky_sphere {
