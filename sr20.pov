@@ -18,7 +18,6 @@ light_source {
 #include "include/valvetrain.inc"
 
 #declare crankangle = -clock * 360 * 2;
-#declare camangle = -clock * 360;
 
 #declare bigend_orbit = 0.5;
 
@@ -32,16 +31,6 @@ light_source {
 
 #declare piston23_y = 1.25+bigend23_y-(0.07295 * sin (clock * pi * 4));
 #declare con_tilt23 = -con_tilt14;
-
-#declare cyl1_in = min(0, (sin (clock + 0.75 ) * 2 * pi)/4) ;
-#declare cyl3_in = min(0, (sin (clock + 0.5  ) * 2 * pi)/4) ;
-#declare cyl4_in = min(0, (sin (clock + 0.25 ) * 2 * pi)/4) ;
-#declare cyl2_in = min(0, (sin (clock + 0    ) * 2 * pi)/4) ;
-
-#declare cyl1_ex = min(0, (sin (clock + 0    ) * 2 * pi)/4) ;
-#declare cyl3_ex = min(0, (sin (clock + 0.75 ) * 2 * pi)/4) ;
-#declare cyl4_ex = min(0, (sin (clock + 0.5  ) * 2 * pi)/4) ;
-#declare cyl2_ex = min(0, (sin (clock + 0.25 ) * 2 * pi)/4) ;
 
 #declare VapourCyl = cylinder {
    <0, 0, 0>, <0, -1, 0>, 0.5
@@ -531,120 +520,115 @@ light_source {
 
 #declare valvegear_bore = cylinder { <0, 1.05, 0>, <0, 0.3, 0>, 0.3 }
 
-#declare sr20_head_cast = union {
-   difference {
-      box { <-2.7, 1, 1>, <2.7, 0, -1> }
-      
-      merge {
-         //*PMName ports
-         
-         object {
-            portknockout
-            translate x*(-1.875)
-         }
-         
-         object {
-            portknockout
-            translate x*1.875
-         }
-         
-         object {
-            portknockout
-            translate x*0.625
-         }
-         
-         object {
-            portknockout
-            translate x*(-0.625)
-         }
-         translate z*1
+#declare sr20_head_cast = difference {
+   box { <-2.7, 1, 1>, <2.7, 0, -1> }
+
+   // ports
+   merge {         
+      object {
+         portknockout
+         translate x*(-1.875)
       }
       
-      merge {
-         //*PMName ports
-         
-         object {
-            portknockout
-            translate x*(-1.875)
-         }
-         
-         object {
-            portknockout
-            translate x*1.875
-         }
-         
-         object {
-            portknockout
-            translate x*0.625
-         }
-         
-         object {
-            portknockout
-            translate x*(-0.625)
-         }
-         translate z*(-1)
+      object {
+         portknockout
+         translate x*1.875
       }
       
-      merge {
-         //*PMName cylkos
-         
-         sphere {
-            //*PMName cyl1
-            <0, 0, 0>, 2
-            translate <-1.875, -1.92, 0>
-         }
-         
-         sphere {
-            //*PMName cyl2
-            <0, 0, 0>, 2
-            translate <-0.625, -1.92, 0>
-         }
-         
-         sphere {
-            //*PMName cyl3
-            <0, 0, 0>, 2
-            translate <0.625, -1.92, 0>
-         }
-         
-         sphere {
-            //*PMName cyl4
-            <0, 0, 0>, 2
-            translate <1.875, -1.92, 0>
-         }
+      object {
+         portknockout
+         translate x*0.625
       }
       
-      merge {
-         //*PMName oles
-         
-         object {
-            //*PMName spark_1
-            headhole
-            translate x*(-1.875)
-         }
-         
-         object {
-            //*PMName spark_2
-            headhole
-            translate x*(-0.625)
-         }
-         
-         object {
-            //*PMName spark_3
-            headhole
-            translate x*0.625
-         }
-         
-         object {
-            //*PMName spark_4
-            headhole
-            translate x*1.875
-         }
-         
-         object { valvegear_bore }
+      object {
+         portknockout
+         translate x*(-0.625)
       }
-      
-      box { <-2.9404, 0.445647, -1.2>, <2.97442, 1.2917, 1.16667> }
+      translate z*1
    }
+
+   // ports
+   merge {
+      object {
+         portknockout
+         translate x*(-1.875)
+      }
+      
+      object {
+         portknockout
+         translate x*1.875
+      }
+      
+      object {
+         portknockout
+         translate x*0.625
+      }
+      
+      object {
+         portknockout
+         translate x*(-0.625)
+      }
+      translate z*(-1)
+   }
+
+   // cylinder head voids
+   merge {         
+      sphere {
+         //*PMName cyl1
+         <0, 0, 0>, 2
+         translate <-1.875, -1.92, 0>
+      }
+      
+      sphere {
+         //*PMName cyl2
+         <0, 0, 0>, 2
+         translate <-0.625, -1.92, 0>
+      }
+      
+      sphere {
+         //*PMName cyl3
+         <0, 0, 0>, 2
+         translate <0.625, -1.92, 0>
+      }
+      
+      sphere {
+         //*PMName cyl4
+         <0, 0, 0>, 2
+         translate <1.875, -1.92, 0>
+      }
+   }
+
+   // port holes
+   merge {         
+      object {
+         //*PMName spark_1
+         headhole
+         translate x*(-1.875)
+      }
+      
+      object {
+         //*PMName spark_2
+         headhole
+         translate x*(-0.625)
+      }
+      
+      object {
+         //*PMName spark_3
+         headhole
+         translate x*0.625
+      }
+      
+      object {
+         //*PMName spark_4
+         headhole
+         translate x*1.875
+      }
+      
+      object { valvegear_bore }
+   }
+
+   box { <-2.9404, 0.445647, -1.2>, <2.97442, 1.2917, 1.16667> }
+   
    
    texture {
       FinishedMetal
@@ -758,23 +742,20 @@ union {
       translate y*2.75
    }
    
-   union {
-      //*PMName timing chain 1
-      object { strchain }
+   object { 
+      strchain 
       rotate x*(-10.75)
       translate <-3, 3.65359, -0.985>
    }
    
-   union {
-      //*PMName timing chain 3
-      object { topchain }
+   object { 
+      topchain
       rotate x*90
       translate <-3, 4.25, 0.55>
    }
    
-   union {
-      //*PMName timing chain 2
-      object { rndchain }
+   object { 
+      rndchain
       translate <-3, 3.75, -0.5>
    }
    
