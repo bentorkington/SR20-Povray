@@ -732,11 +732,11 @@ light_source {
 
 #declare sr20_piston = union {
    difference {
-      //*PMName piston_cast      
       object { piston_lathe }
       
       cylinder { <1.05, 1, 0>, <-1.05, 1, 0>, 0.32328 }
       
+      // piston top shape
       union {
          cylinder { <0, 1.95, 0>, <0, 2.05, 0>, 0.85 }
          torus { 0.85, .05 translate y * 2 }
@@ -757,7 +757,7 @@ light_source {
       
       box { <-0.35, -0.1, -0.5>, <0.35, 1.5, 0.5> }
       
-      cylinder { <-1.05, -1, 0>, <1.05, -1, 0>, 1.25 }
+      cylinder { <-1.05, -0.75, 0>, <1.05, -0.75, 0>, 1.25 } // counterweight interference
       
       pigment { color rgb <0.780392, 0.780392, 0.780392> }
       
