@@ -679,15 +679,18 @@ light_source {
    }
 }
 
-#declare pistonlathe = lathe {
-   //*PMName piston_lathe
-   linear_spline
-   11,
-   <0, 2>, <1, 2>, <1, 1.9>, <0.95, 1.9>, <0.95, 1.85>, <1, 1.85>, <1, 1.8>, <0.95, 1.8>, <0.95, 1.75>, <1, 1.75>, <1, 0>
-   sturm
-   scale <0.9995, 1, 0.9995>
-   rotate <0, 0, 0>
-   translate <0, 0, 0>
+#declare ring_void = difference {
+   cylinder { <0, 0, 0>, <0, 0.05, 0> 1.1 }
+   cylinder { <0, -0.001, 0>, <0, 0.0501, 0> 0.95 }
+}
+
+#declare piston_shape = cylinder { <0, 0, 0> <0, 2, 0> 0.9995 }
+
+#declare piston_lathe = difference {
+   object { piston_shape }
+   object { ring_void translate y * 1.85 }
+   object { ring_void translate y * 1.75 }
+   object { ring_void translate y * 1.65 }
 }
 
 #declare sr20_cyl_bore = cylinder {
@@ -730,7 +733,7 @@ light_source {
 #declare sr20_piston = union {
    difference {
       //*PMName piston_cast      
-      object { pistonlathe }
+      object { piston_lathe }
       
       cylinder { <1.05, 1, 0>, <-1.05, 1, 0>, 0.32328 }
       
