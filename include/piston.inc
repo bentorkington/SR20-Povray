@@ -1,3 +1,4 @@
+#declare AluminiumPigment = pigment { color rgb <0.780392, 0.780392, 0.780392> }
 
 #declare PistonTexture = texture {
    pigment { color rgb <0.780392, 0.780392, 0.780392> }
@@ -9,6 +10,18 @@
       
       reflection { rgb <0.290196, 0.290196, 0.290196>, rgb <0, 0, 0> }
    }
+}
+
+#declare CastAluminium = texture {
+    pigment { AluminiumPigment }
+    normal { wrinkles 0.15 scale 0.05 }
+    finish {
+        ambient rgb <0.278431, 0.278431, 0.278431>
+        metallic 1
+        specular 0.8
+        roughness 0.05
+        reflection { rgb <0.290196, 0.290196, 0.290196>, rgb <0, 0, 0> }
+    }
 }
 
 #declare gudgeonpin = difference {
@@ -41,46 +54,49 @@
    cylinder { <0, 2.8, 0>, <0, 0, 0>, 0.5 }
 }
 
+#declare piston_flat = union {
+    box { <0.8, 0.65, -1>, <1.01, 1.35, 1> }
+    cylinder { <0.8 + 0.2, 0.65, -1>, <0.8 + 0.2, 0.65, 1> 0.2 }
+    cylinder { <0.8 + 0.2, 1.35, -1>, <0.8 + 0.2, 1.35, 1> 0.2 }
+
+    texture { CastAluminium }
+}
+
 #declare sr20_piston = union {
    difference {
       object { piston_lathe }
       
+      // gudgeon pin bore
       cylinder { <1.05, 1, 0>, <-1.05, 1, 0>, 0.32328 }
       
       // piston top shape
       union {
          cylinder { <0, 1.95, 0>, <0, 2.05, 0>, 0.85 }
          torus { 0.85, .05 translate y * 2 }
-         texture { BlockBumpy }
+         texture { CastAluminium }
       }
 
-      superellipsoid {
-         <0.15, 0.15>
-         rotate x*90
-         translate <-1.7345, 0.55905, 0>
-      }
-      
-      superellipsoid {
-         <0.15, 0.15>
-         rotate x*90
-         translate <1.7345, 0.55905, 0>
-      }
+      object { piston_flat }
+      object { piston_flat scale <-1, 1, 1> }
+
       
       box { <-0.35, -0.1, -0.5>, <0.35, 1.5, 0.5> }
       
-      cylinder { <-1.05, -0.75, 0>, <1.05, -0.75, 0>, 1.25 } // counterweight interference
+      cylinder { <-1.05, -0.85, 0>, <1.05, -0.85, 0>, 1.25 } // counterweight interference
       
-      pigment { color rgb <0.780392, 0.780392, 0.780392> }
+      texture { PistonTexture }
+
+    //   pigment { color rgb <0.780392, 0.780392, 0.780392> }
       
-      finish {
-         phong 0.2
-         metallic 1
-         roughness 0.05
+    //   finish {
+    //      phong 0.2
+    //      metallic 1
+    //      roughness 0.05
          
-         reflection {
-            rgb <0.380392, 0.380392, 0.380392>, rgb <0, 0, 0>
-         }
-      }      
+    //      reflection {
+    //         rgb <0.380392, 0.380392, 0.380392>, rgb <0, 0, 0>
+    //      }
+    //   }      
    }
    
    object { gudgeonpin }
