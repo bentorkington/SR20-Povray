@@ -1,8 +1,11 @@
 #declare AluminiumPigment = pigment { color rgb <0.780392, 0.780392, 0.780392> }
 
 #declare PistonTexture = texture {
-   pigment { color rgb <0.780392, 0.780392, 0.780392> }
+   pigment { AluminiumPigment }
    
+   // attempt at a spun-like texture
+   //normal { waves 0.35 frequency 2 scale 0.01 }
+
    finish {
       phong 0.2
       metallic 1
@@ -84,19 +87,7 @@
       
       cylinder { <-1.05, -0.85, 0>, <1.05, -0.85, 0>, 1.25 } // counterweight interference
       
-      texture { PistonTexture }
-
-    //   pigment { color rgb <0.780392, 0.780392, 0.780392> }
-      
-    //   finish {
-    //      phong 0.2
-    //      metallic 1
-    //      roughness 0.05
-         
-    //      reflection {
-    //         rgb <0.380392, 0.380392, 0.380392>, rgb <0, 0, 0>
-    //      }
-    //   }      
+      texture { PistonTexture }    
    }
    
    object { gudgeonpin }
