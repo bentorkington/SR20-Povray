@@ -769,9 +769,7 @@ light_source {
          reflection {
             rgb <0.380392, 0.380392, 0.380392>, rgb <0, 0, 0>
          }
-      }
-      
-      bounded_by { cylinder { <0, 2.0473, 0>, <0, 0, 0>, 1.02 } }
+      }      
    }
    
    object { gudgeonpin }
