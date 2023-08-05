@@ -737,16 +737,12 @@ light_source {
       
       cylinder { <1.05, 1, 0>, <-1.05, 1, 0>, 0.32328 }
       
-      superellipsoid {
-         <1, 0.25>
-         
-         texture {
-            BlockBumpy
-         }
-         rotate x*90
-         translate y*2.9
+      union {
+         cylinder { <0, 1.95, 0>, <0, 2.05, 0>, 0.85 }
+         torus { 0.85, .05 translate y * 2 }
+         texture { BlockBumpy }
       }
-      
+
       superellipsoid {
          <0.15, 0.15>
          rotate x*90
