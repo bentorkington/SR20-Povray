@@ -52,7 +52,7 @@
 }
 
 
-#declare cshft_bigend_jnl = merge {
+#declare cshft_bigend_jnl = union {
    object { bigend_offset }
    
    object {
@@ -118,7 +118,7 @@
          translate <0, 0, 0>
       }
       
-      merge {
+      union {
          //*PMName bigend_kos
          
          object {
@@ -155,7 +155,7 @@
       }
    }
    
-   merge {
+   union {
       //*PMName bigend_assys
       
       object {

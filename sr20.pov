@@ -50,7 +50,7 @@ light_source {
    finish { phong 0.5 }
 }
 
-#declare chainlink_single_0 = merge {
+#declare chainlink_single_0 = union {
    cylinder {
       <0.05, 0, 0>, <-0.05, 0, 0>, 0.5
       scale 1
@@ -526,7 +526,7 @@ light_source {
    box { <-2.7, 1, 1>, <2.7, 0, -1> }
 
    // ports
-   merge {         
+   union {         
       object {
          portknockout
          translate x*(-1.875)
@@ -550,7 +550,7 @@ light_source {
    }
 
    // ports
-   merge {
+   union {
       object {
          portknockout
          translate x*(-1.875)
@@ -574,7 +574,7 @@ light_source {
    }
 
    // cylinder head voids
-   merge {         
+   union {         
       sphere {
          //*PMName cyl1
          <0, 0, 0>, 2
@@ -601,7 +601,7 @@ light_source {
    }
 
    // port holes
-   merge {         
+   union {         
       object {
          //*PMName spark_1
          headhole
