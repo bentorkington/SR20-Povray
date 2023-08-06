@@ -11,9 +11,7 @@
 #declare camsprocket = difference {
    union {
       cylinder { <0, 0, -0.02>, <0, 0, 0.02>, 0.5 }
-      
       cylinder { <0, 0.0041667, 0>, <0, 0.0041667, -0.3>, 0.175 }
-      
       difference {
          cylinder { <0, 0.00416667, -0.12467>, <0, 0.00416667, -0.0134729>, 0.254076 }
          
@@ -25,58 +23,27 @@
       }
    }
    
-   union {
-      //*PMRawBegin
-      #declare i = 0;
-      union {
-      #while (i<36)
-      cylinder { <0,0.495,-0.05>,<0,0.495,0.05>, 0.045
-      rotate <0,0, i * 10>
-      }
-      #declare i=i+1;
-      #end
-      }
-      //*PMRawEnd
-      
-      cylinder {
-         <0, 0, 0.05>, <0, 0, -0.05>, 0.1
-         translate x*0.3
-      }
-      
-      cylinder {
-         <0, 0, 0.05>, <0, 0, -0.05>, 0.1
-         translate x*0.3
-         rotate z*60
-      }
-      
-      cylinder {
-         <0, 0, 0.05>, <0, 0, -0.05>, 0.1
-         translate x*0.3
-         rotate z*120
-      }
-      
-      cylinder {
-         <0, 0, 0.05>, <0, 0, -0.05>, 0.1
-         translate x*0.3
-         rotate z*180
-      }
-      
-      cylinder {
-         <0, 0, 0.05>, <0, 0, -0.05>, 0.1
-         translate x*0.3
-         rotate z*240
-      }
-      
-      cylinder {
-         <0, 0, 0.05>, <0, 0, -0.05>, 0.1
-         translate x*0.3
-         rotate z*300
-      }
-   }
+    // sprocket teeth 
+    #local i = 0;
+    #while (i < 36)
+    cylinder { <0, 0.495, -0.05>, <0, 0.495, 0.05>, 0.045 rotate <0,0, i * 10> }
+    #local i = i + 1;
+    #end
+
+    // lightening bores
+    #local i = 0;
+    #while (i < 6)
+    cylinder {
+        <0, 0, 0.05>, <0, 0, -0.05>, 0.1
+        translate x*0.3
+        rotate <0, 0, i * 60>
+    }
+    #local i = i + 1;
+    #end
    
-   texture {
-      SprocText
-   }
+    texture {
+        SprocText
+    }
 }
 
 #declare cam_lobe = prism {
@@ -101,69 +68,20 @@
       translate x*(-3)
    }
    
-   cylinder {
-      <-2.9, 0, 0>, <2.5, 0, 0>, 0.1      
-      texture { RoughMetal }
-   }
+   cylinder { <-2.9, 0, 0>, <2.5, 0, 0>, 0.1 texture { RoughMetal } }
    
-   merge {
-      //*PMName lobes_and_journals
+   union {      
+      // lobes 1, 2, 3, 4
+      object { cam_lobe translate x*(-1.875) }
+      object { cam_lobe rotate x*(-90) translate x*(-0.625) }
+      object { cam_lobe rotate x*90 translate x*0.625 }
+      object { cam_lobe rotate x*180 translate x*1.875 }
       
-      object {
-         //*PMName lobe_1
-         cam_lobe
-         translate x*(-1.875)
-      }
-      
-      object {
-         //*PMName lobe_4
-         cam_lobe
-         rotate x*180
-         translate x*1.875
-      }
-      
-      object {
-         //*PMName lobe_3
-         cam_lobe
-         rotate x*90
-         translate x*0.625
-      }
-      
-      object {
-         //*PMName lobe_2
-         cam_lobe
-         rotate x*(-90)
-         translate x*(-0.625)
-      }
-      
-      object {
-         //*PMName journal1
-         cam_journal
-         translate x*(-2.4)
-      }
-      
-      object {
-         //*PMName journal2
-         cam_journal
-         translate x*(-1.25)
-      }
-      
-      object {
-         //*PMName journal3
-         cam_journal
-      }
-      
-      object {
-         //*PMName journal4
-         cam_journal
-         translate x*1.25
-      }
-      
-      object {
-         //*PMName journal5
-         cam_journal
-         translate x*2.4
-      }
+      object { cam_journal translate x*(-2.4) }
+      object { cam_journal translate x*(-1.25) }
+      object { cam_journal }
+      object { cam_journal translate x*1.25 }      
+      object { cam_journal translate x*2.4 }
       
       texture { ShinyMetal }
    }
